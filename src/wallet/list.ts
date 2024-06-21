@@ -27,13 +27,6 @@ export const walletList: IntegratedWallet[] = [
     linkToDocs: 'https://www.okx.com/web3',
   },
   {
-    name: BROWSER_INJECTED_WALLET_NAME,
-    icon: '',
-    wallet: '',
-    provider: '',
-    linkToDocs: '',
-  },
-  {
     name: 'OneKey',
     icon: oneKeyIcon,
     wallet: OneKeyWallet,
