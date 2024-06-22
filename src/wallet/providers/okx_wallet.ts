@@ -100,7 +100,7 @@ export class OKXWallet extends WalletProvider {
       throw new Error('OKX Wallet not connected');
     }
     // sign the PSBT
-    return (await this.signPsbts([psbtHex, psbtHex]))[0];
+    return await this.bitcoinNetwork.signPsbt(psbtHex);
   };
 
   signPsbts = async (psbtsHexes: string[]): Promise<string[]> => {

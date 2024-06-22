@@ -15,7 +15,7 @@ const OutputForm = ({
 }) => {
   return (
     <div style={{ marginBottom: 20 }}>
-      <h2>Outputs List</h2>
+      <h2>Output List</h2>
       {outputs.map((out, index) => {
         return (
           <List

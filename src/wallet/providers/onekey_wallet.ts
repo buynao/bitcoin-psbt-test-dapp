@@ -46,7 +46,7 @@ export class OneKeyWallet extends WalletProvider {
   }
 
   async signPsbt(psbtHex: string): Promise<string> {
-    return window[oneKeyProvider].btcwallet.signPsbts([psbtHex, psbtHex]);
+    return window[oneKeyProvider].btcwallet.signPsbt(psbtHex);
   }
 
   async signPsbts(psbtsHexes: string[]): Promise<string[]> {

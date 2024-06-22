@@ -20,7 +20,7 @@ const InputForm = ({
 }) => {
   return (
     <div style={{ marginBottom: 20 }}>
-      <h2>Inputs List</h2>
+      <h2>Input List</h2>
       {inputs.map((out, index) => {
         return (
           <List
@@ -32,7 +32,6 @@ const InputForm = ({
               description={
                 <List>
                   <List.Item.Meta
-                    style={{ marginBottom: 20, marginTop: 0 }}
                     title={<h4>txid</h4>}
                     description={
                       <Input
@@ -105,10 +104,11 @@ const InputForm = ({
                           style={{
                             width: index === 0 ? 500 : '50%',
                             marginTop: '20px',
+                            marginBottom: '20px',
                           }}
                           icon={<PlusOutlined />}
                         >
-                          添加一组 inputs
+                          添加一组 input
                         </Button>
                         {index > 0 && (
                           <Button
