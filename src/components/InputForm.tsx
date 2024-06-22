@@ -11,7 +11,7 @@ export type Input = {
   scriptPubKey: string;
 };
 
-const InputForm: React.FC = ({
+const InputForm = ({
   inputs,
   setInputs,
 }: {

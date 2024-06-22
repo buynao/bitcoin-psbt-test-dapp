@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { WalletProvider } from '../wallet/wallet_provider';
-import { satoshiToBtc } from '../help';
 import { Psbt, Transaction } from 'bitcoinjs-lib';
 import { decodePsbt } from '../mempool_api';
 import { toNetwork } from '../wallet';
@@ -8,7 +7,7 @@ import { toNetwork } from '../wallet';
 import * as bitcoinjs from 'bitcoinjs-lib';
 import * as ecc from '@bitcoin-js/tiny-secp256k1-asmjs';
 
-import { Button, List, message, Spin } from 'antd';
+import { Button, message, Spin } from 'antd';
 import { OutputForm, Output } from './OutputForm';
 import { InputForm, Input } from './InputForm';
 import { v4 } from 'uuid';

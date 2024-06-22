@@ -6,7 +6,7 @@ import { v4 } from 'uuid';
 
 export type Output = { uuid: string; address: string; value: string };
 
-const OutputForm: React.FC = ({
+const OutputForm = ({
   outputs,
   setOutputs,
 }: {
