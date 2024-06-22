@@ -27,9 +27,7 @@ export function validateAddress(network: Network, address: string): void {
     );
   }
 }
-export const network =
-  (process.env.NEXT_PUBLIC_NETWORK as Network) || Network.SIGNET;
-console.log('>>>>>>>process', process);
+export const network = Network.SIGNET;
 interface NetworkConfig {
   coinName: string;
   coinSymbol: string;
@@ -42,23 +40,23 @@ const mainnetConfig: NetworkConfig = {
   coinSymbol: 'BTC',
   networkName: 'BTC',
   mempoolApiUrl: `https://babylon.mempool.space`,
-  rpcUrl: `${process.env.NEXT_PUBLIC_RPC_URL}`,
+  rpcUrl: 'https://btc-signet.imdev.works',
 };
 
 const signetConfig: NetworkConfig = {
   coinName: 'Signet BTC',
   coinSymbol: 'sBTC',
   networkName: 'BTC signet',
-  mempoolApiUrl: `${process.env.NEXT_PUBLIC_MEMPOOL_API}/signet`,
-  rpcUrl: `${process.env.NEXT_PUBLIC_RPC_URL}`,
+  mempoolApiUrl: 'https://babylon.mempool.space/signet',
+  rpcUrl: 'https://btc-signet.imdev.works',
 };
 
 const testnetConfig: NetworkConfig = {
   coinName: 'Testnet BTC',
   coinSymbol: 'tBTC',
   networkName: 'BTC testnet',
-  mempoolApiUrl: `${process.env.NEXT_PUBLIC_MEMPOOL_API}/testnet`,
-  rpcUrl: `${process.env.NEXT_PUBLIC_RPC_URL}`,
+  mempoolApiUrl: 'https://babylon.mempool.space/testnet',
+  rpcUrl: 'https://btc-signet.imdev.works',
 };
 
 const config: Record<string, NetworkConfig> = {
@@ -68,12 +66,8 @@ const config: Record<string, NetworkConfig> = {
 };
 export function getNetworkConfig(): NetworkConfig {
   switch (network) {
-    case Network.MAINNET:
-      return config.mainnet;
     case Network.SIGNET:
       return config.signet;
-    case Network.TESTNET:
-      return config.testnet;
     default:
       return config.signet;
   }
