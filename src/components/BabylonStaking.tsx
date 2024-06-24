@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { WalletProvider } from '../wallet/wallet_provider';
-import { Psbt, Transaction } from 'bitcoinjs-lib';
-import { decodePsbt } from '../mempool_api';
+import { Psbt } from 'bitcoinjs-lib';
 import { toNetwork } from '../wallet';
 
 import * as bitcoinjs from 'bitcoinjs-lib';
@@ -73,18 +72,6 @@ function BabylonStaking({ btcWallet }: { btcWallet: WalletProvider }) {
         });
       });
       const psbtHex = stakingPsbt.toHex();
-      const psbt = Psbt.fromHex(psbtHex);
-      const psbtBase64 = psbt.toBase64();
-      const unSignedTx = Transaction.fromBuffer(psbt.data.getTransaction());
-      const vsize = unSignedTx.virtualSize();
-      console.log('>>> staking vsize', vsize);
-      const version = psbt.version;
-      console.log('>>> staking version', version);
-      const decodeTx = await decodePsbt(psbtBase64);
-      console.log(
-        '>>> staking decodeTx stringify',
-        JSON.stringify(decodeTx.result, null, 2),
-      );
       const result = needSigns
         ? await btcWallet.signPsbts([psbtHex, psbtHex])
         : await btcWallet.signPsbt(psbtHex);
