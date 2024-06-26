@@ -29,6 +29,7 @@ function BabylonStaking({ btcWallet }: { btcWallet: WalletProvider }) {
       setInputs(utxos);
       setLoading(false);
     } catch (e) {
+      message.error(e.message);
       console.warn(e);
     }
   }, []);
@@ -43,16 +44,17 @@ function BabylonStaking({ btcWallet }: { btcWallet: WalletProvider }) {
     }
   }, [btcWallet, getInputs]);
 
-  const signStaking = async (needSigns: boolean = false) => {
+  const signStaking = async (
+    needSigns: boolean = false,
+    isUnisat: boolean = false,
+  ) => {
     if (!inputs.length || !outputs.length) {
       return message.error(' utxo 不能为空');
     }
     try {
       const network = await btcWallet.getNetwork();
-      console.log('>>>>>>>>>>toNetwork(network)', toNetwork(network));
       const stakingPsbt = new Psbt({ network: toNetwork(network) });
       stakingPsbt.setVersion(2);
-      console.log('>>>>>>>>>inputs', inputs);
       inputs.forEach((input) => {
         stakingPsbt.addInput({
           hash: input.txid,
@@ -72,9 +74,10 @@ function BabylonStaking({ btcWallet }: { btcWallet: WalletProvider }) {
         });
       });
       const psbtHex = stakingPsbt.toHex();
+      const wallet = isUnisat && window.unisat ? window.unisat : btcWallet;
       const result = needSigns
-        ? await btcWallet.signPsbts([psbtHex, psbtHex])
-        : await btcWallet.signPsbt(psbtHex);
+        ? await wallet.signPsbts([psbtHex, psbtHex])
+        : await wallet.signPsbt(psbtHex);
       message.success('签名成功');
       setResult(result.toString());
     } catch (e) {
@@ -95,6 +98,17 @@ function BabylonStaking({ btcWallet }: { btcWallet: WalletProvider }) {
         Sign Psbt
       </Button>
       <Button onClick={() => signStaking(true)}>Sign Psbts</Button>
+      {window.unisat && (
+        <div style={{ marginTop: 10 }}>
+          <Button
+            style={{ marginRight: 10 }}
+            onClick={() => signStaking(false, true)}
+          >
+            Unisat Psbt
+          </Button>
+          <Button onClick={() => signStaking(true, true)}>Unisat Psbts</Button>
+        </div>
+      )}
       {result && <p style={{ marginTop: 10 }}>签名结果：{result}</p>}
     </div>
   );

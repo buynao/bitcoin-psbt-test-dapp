@@ -2,7 +2,7 @@
 import bitgetWalletIcon from './icons/bitget-wallet.svg';
 import okxIcon from './icons/okx.svg';
 import oneKeyIcon from './icons/onekey.svg';
-import { BitgetWallet, bitgetWalletProvider } from './providers/bitget_wallet';
+import { ImTokenWallet, imTokenProvider } from './providers/imToken_wallet';
 import { OKXWallet, okxProvider } from './providers/okx_wallet';
 import { OneKeyWallet, oneKeyProvider } from './providers/onekey_wallet';
 
@@ -34,10 +34,10 @@ export const walletList: IntegratedWallet[] = [
     linkToDocs: 'https://onekey.so/download',
   },
   {
-    name: 'Bitget Wallet',
+    name: 'imToken Wallet',
     icon: bitgetWalletIcon,
-    wallet: BitgetWallet,
-    provider: bitgetWalletProvider,
+    wallet: ImTokenWallet,
+    provider: imTokenProvider,
     linkToDocs: 'https://web3.bitget.com',
   },
 ];

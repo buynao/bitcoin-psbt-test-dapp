@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { walletList } from '../wallet/list';
 import { WalletProvider } from '../wallet/wallet_provider';
 import { useCallback, useEffect, useState } from 'react';
@@ -29,9 +29,13 @@ function Connect({
 
   const handleConnectBTC = useCallback(
     async (btcWallet: WalletProvider) => {
-      const result = await btcWallet.connectWallet();
-      initWalletProvider(btcWallet);
-      setWallet(result);
+      try {
+        const result = await btcWallet.connectWallet();
+        initWalletProvider(btcWallet);
+        setWallet(result);
+      } catch (e) {
+        message.error(e.message);
+      }
     },
     [initWalletProvider, setWallet],
   );
