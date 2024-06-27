@@ -61,7 +61,7 @@ function BabylonStaking({ btcWallet }: { btcWallet: WalletProvider }) {
           index: input.vout,
           witnessUtxo: {
             script: Buffer.from(input.scriptPubKey, 'hex'),
-            value: input.value,
+            value: Number(input.value),
           },
           // tapInternalKey: Buffer.from(publicKeyNoCoord, 'hex'),
           sequence: 4294967293,
@@ -74,10 +74,12 @@ function BabylonStaking({ btcWallet }: { btcWallet: WalletProvider }) {
         });
       });
       const psbtHex = stakingPsbt.toHex();
+      console.log('>>>>>>>>psbtHex', psbtHex);
       const wallet = isUnisat && window.unisat ? window.unisat : btcWallet;
       const result = needSigns
         ? await wallet.signPsbts([psbtHex, psbtHex])
         : await wallet.signPsbt(psbtHex);
+      console.log('>>>>>>>>result', psbtHex);
       message.success('签名成功');
       setResult(result.toString());
     } catch (e) {

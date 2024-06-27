@@ -16,15 +16,16 @@ function Connect({
   const [balance, setBalance] = useState(0);
 
   const initWalletProvider = useCallback(async (btcWallet) => {
-    if (btcWallet) {
-      const name = await btcWallet.getWalletProviderName();
-      const address = await btcWallet.getAddress();
-      const balanceInSatoshis = await btcWallet.getBalance();
-      const balanceInBTC = balanceInSatoshis / 100000000;
-      setWalletName(name);
-      setAddress(address);
-      setBalance(balanceInBTC);
+    if (!btcWallet) {
+      return;
     }
+    const name = await btcWallet.getWalletProviderName();
+    const address = await btcWallet.getAddress();
+    const balanceInSatoshis = await btcWallet.getBalance();
+    const balanceInBTC = balanceInSatoshis / 100000000;
+    setWalletName(name);
+    setAddress(address);
+    setBalance(balanceInBTC);
   }, []);
 
   const handleConnectBTC = useCallback(
@@ -43,9 +44,7 @@ function Connect({
   useEffect(() => {
     if (btcWallet) {
       let once = false;
-      console.log('>>>>>>>>>add accountChanged');
       btcWallet.on('accountChanged', () => {
-        console.log('>>>>>>>>>accountChanged');
         if (!once) {
           handleConnectBTC(btcWallet);
         }

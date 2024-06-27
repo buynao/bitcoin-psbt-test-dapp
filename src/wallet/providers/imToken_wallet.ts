@@ -6,7 +6,7 @@ import {
   WalletInfo,
   WalletProvider,
 } from '../wallet_provider';
-export const imTokenProvider = 'imTokenBtc';
+export const imTokenProvider = 'bitcoin';
 
 export class ImTokenWallet extends WalletProvider {
   private imTokenAccount: WalletInfo | undefined;
@@ -24,25 +24,14 @@ export class ImTokenWallet extends WalletProvider {
   }
 
   connectWallet = async (): Promise<this> => {
-    let account = null;
     try {
-      account = await this.imTokenProvider.request('connect');
+      await this.imTokenProvider.request({
+        method: 'btc_requestAccounts',
+      });
       return this;
     } catch (error) {
-      throw new Error('Could not get account in imToken Wallet');
+      throw new Error(error.message);
     }
-    console.log('>>>>>>>>>account', account);
-    const { address, publicKey } = account;
-
-    if (publicKey && address) {
-      this.imTokenAccount = {
-        ...account,
-        address,
-        publicKeyHex: publicKey,
-      };
-      return this;
-    }
-    throw new Error('Could not connect to imToken Wallet');
   };
 
   getWalletProviderName = async (): Promise<string> => {
@@ -50,17 +39,20 @@ export class ImTokenWallet extends WalletProvider {
   };
 
   getAccount = async (): Promise<WalletInfo> => {
-    return await this.imTokenProvider.request('btc_getAccount');
+    return await this.imTokenProvider.request({
+      method: 'btc_requestAccounts',
+    });
   };
 
   getAddress = async (): Promise<string> => {
     const account = await this.getAccount();
-    return account.address;
+    console.log('>>>>account', account);
+    return account[0];
   };
 
   getPublicKeyHex = async (): Promise<string> => {
     const account = await this.getAccount();
-    return account.publicKeyHex;
+    return account?.publicKeyHex;
   };
 
   getNetwork = async (): Promise<Network> => {
@@ -68,30 +60,43 @@ export class ImTokenWallet extends WalletProvider {
   };
 
   getBalance = async (): Promise<number> => {
-    const account = await this.getAccount();
-    return await this.imTokenProvider.request('btc_getBalance', { account });
+    return await this.imTokenProvider.request({
+      method: 'btc_getBalance',
+    });
   };
 
   getNetworkFees = async (): Promise<Fees> => {
-    const account = await this.getAccount();
-    return await this.imTokenProvider.request('getNetworkFees', { account });
+    return await this.imTokenProvider.request({
+      method: 'getNetworkFees',
+    });
   };
 
   getUtxos = async (address: string, amount: number): Promise<UTXO[]> => {
-    const account = await this.getAccount();
-    return await this.imTokenProvider.request('btc_getUtxos', {
-      account,
-      address,
-      amount,
+    const utxos = await this.imTokenProvider.request({
+      method: 'btc_getUnspent',
+      params: [address, amount],
+    });
+    if (!utxos || utxos.length === 0) return [];
+    return utxos?.map((utxo) => {
+      return {
+        ...utxo,
+        value: utxo?.value ?? utxo?.amount,
+        txid: utxo?.txid ?? utxo?.txHash,
+      };
     });
   };
 
   getBTCTipHeight = async (): Promise<number> => {
-    return await this.imTokenProvider.request('getBTCTipHeight');
+    return await this.imTokenProvider.request({
+      method: 'getBTCTipHeight',
+    });
   };
 
   pushTx = async (txHex: string): Promise<string> => {
-    return await this.imTokenProvider.request('pushTx', { txHex });
+    return await this.imTokenProvider.request({
+      method: 'pushTx',
+      params: [txHex],
+    });
   };
 
   on = async (eventName: string, callBack: () => void) => {
@@ -101,14 +106,23 @@ export class ImTokenWallet extends WalletProvider {
   };
 
   signPsbt = async (psbtHex: string): Promise<string> => {
-    return await this.imTokenProvider.request('signPsbt', { psbtHex });
+    return await this.imTokenProvider.request({
+      method: 'btc_signPsbt',
+      params: [psbtHex],
+    });
   };
 
   signPsbts = async (psbtsHexes: string[]): Promise<string[]> => {
-    return await this.imTokenProvider.request('signPsbts', { psbtsHexes });
+    return await this.imTokenProvider.request({
+      method: 'btc_signPsbts',
+      params: [psbtsHexes],
+    });
   };
 
   signMessageBIP322 = async (message: string): Promise<string> => {
-    return await this.imTokenProvider.request('signMessageBIP322', { message });
+    return await this.imTokenProvider.request({
+      method: 'btc_signMessage',
+      params: [message],
+    });
   };
 }
