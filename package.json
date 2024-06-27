@@ -13,6 +13,7 @@
     "@bitcoin-js/tiny-secp256k1-asmjs": "^2.2.3",
     "@rollup/plugin-inject": "^5.0.5",
     "antd": "^5.18.3",
+    "axios": "^1.7.2",
     "bitcoinjs-lib": "^6.1.6",
     "buffer": "^6.0.3",
     "process": "^0.11.10",
