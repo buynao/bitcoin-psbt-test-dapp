@@ -19,13 +19,17 @@ function Connect({
     if (!btcWallet) {
       return;
     }
-    const name = await btcWallet.getWalletProviderName();
-    const address = await btcWallet.getAddress();
-    const balanceInSatoshis = await btcWallet.getBalance();
-    const balanceInBTC = balanceInSatoshis / 100000000;
-    setWalletName(name);
-    setAddress(address);
-    setBalance(balanceInBTC);
+    try {
+      const name = await btcWallet.getWalletProviderName();
+      const address = await btcWallet.getAddress();
+      const balanceInSatoshis = await btcWallet.getBalance();
+      const balanceInBTC = balanceInSatoshis / 100000000;
+      setWalletName(name);
+      setAddress(address);
+      setBalance(balanceInBTC);
+    } catch (e) {
+      message.error(e.message);
+    }
   }, []);
 
   const handleConnectBTC = useCallback(
